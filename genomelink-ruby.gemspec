@@ -1,17 +1,16 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "genomelink/ruby/version"
+require "genomelink/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "genomelink-ruby"
-  spec.version       = Genomelink::Ruby::VERSION
+  spec.version       = Genomelink::VERSION
   spec.authors       = ["Ashwin Subramanian"]
   spec.email         = ["Ashwin.Subramanian@ooma.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Ruby Gem to access genome link APIs}
+  spec.description   = %q{This is a ruby gem to access the genome link APIs. It inclides the API classes and the OAuth system.}
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -33,4 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_dependency "oauth2"
 end
