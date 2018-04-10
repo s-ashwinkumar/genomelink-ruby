@@ -12,7 +12,7 @@ module Genomelink
       #
       # @return [String] URL where user needs to be redirected for authorization
       def authorization_url(scope)
-        client.auth_code.authorize_url(redirect_uri: ENV['GENOMELINK_CALLBACK_URL'], scope: scope)
+        client.auth_code.authorize_url(redirect_uri: get_config('GENOMELINK_CALLBACK_URL'), scope: scope)
       end
 
       # [get_token description]
@@ -20,7 +20,27 @@ module Genomelink
       #
       # @return [String] Access token that can be used to access the genomelink API.
       def get_token(auth_code)
-        client.auth_code.get_token(auth_code, redirect_uri: ENV['GENOMELINK_CALLBACK_URL']).token
+        client.auth_code.get_token(auth_code, redirect_uri: get_config('GENOMELINK_CALLBACK_URL')).token
+      end
+
+      private
+      # gets the Oauth Client object
+      #
+      # @return [OAuth2::Client] A Oauth Client object.
+      def client
+        @client ||= OAuth2::Client.new( get_config('GENOMELINK_CLIENT_ID'),
+          get_config('GENOMELINK_CLIENT_SECRET'),
+          :site => OAUTH_PATH
+        )
+      end
+
+      # gets a gicen env variable, checks for existence and throws exception if not present
+      # @param config_name [String] key of the env variable
+      #
+      # @return [String] value of the env variable
+      def get_config(config_name)
+        raise ConfigNotFound, "Environment variable #{config_name} not found !" unless ENV[config_name]
+        ENV[config_name]
       end
     end
   end

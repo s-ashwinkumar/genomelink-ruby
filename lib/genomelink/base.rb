@@ -1,6 +1,7 @@
 require 'oauth2'
 
 module Genomelink
+  class ConfigNotFound < StandardError; end
   # The Base class for all of the other class.
   # Let other classes inherit from here and put common methods here.
   #
@@ -15,7 +16,11 @@ module Genomelink
       #
       # @return [Hash] The response Json parsed as a hash.
       def get(path, token)
-        service(token).get(path).parsed
+        result = service(token).get do |req|
+          req.url path
+          req.headers['Authorization'] = "BEARER #{token}"
+        end
+        JSON.parse(result.body)
       end
 
       private
@@ -25,14 +30,7 @@ module Genomelink
       #
       # @return [OAuth2::AccessToken] An initialized AccessToken instance that acts as service client
       def service(token)
-        @service ||= OAuth2::AccessToken.new(client,token)
-      end
-
-      # gets the Oauth Client object
-      #
-      # @return [OAuth2::Client] A Oauth Client object.
-      def client
-        @client ||= OAuth2::Client.new(ENV['GENOMELINK_CLIENT_ID'],ENV['GENOMELINK_CLIENT_SECRET'] , :site => SITE)
+        @service ||= Faraday.new(url: SITE)
       end
     end
 

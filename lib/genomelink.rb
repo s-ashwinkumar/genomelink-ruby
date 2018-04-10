@@ -4,6 +4,7 @@ require "genomelink/reports"
 require "genomelink/oauth"
 
 module Genomelink
-  # Website for the genomelink APIs
-  SITE = 'https://genomelink.io/oauth/authorize'
+  SITE = 'https://genomelink.io'.freeze
+  # Path for genomelinke oauth
+  OAUTH_PATH = "#{SITE}/oauth/authorize".freeze
 end
